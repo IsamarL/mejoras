@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Acerca de{% endblock %}
+
+{% block contenido %}
+
+<!-- Encabezado con imagen -->
+<div class="container mt-5">
+  <div class="text-center">
+    <img src="{{ url_for('static', filename='sen4.jpg') }}" 
+         class="img-fluid rounded shadow-sm mb-4" 
+         alt="send4 - la aventura nos espera" 
+         style="max-height: 150px; object-fit: cover;">
+  </div>
+  <h2 class="text-center mb-4">Grano Verde
+</h2>
+  <p class="text-center">
+    En <strong>Grano Verde</strong> es tu tienda en línea de granos básicos frescos y confiables.
+    Ofrecemos arroz, frijoles, maíz y más,   <strong>directo del campo a tu mesa.</strong>  Calidad, 
+    <strong>buen precio y entrega  rapida.  
+  </p></strong>
+</div>
+
+<!-- Misión, Visión, Objetivo -->
+<div class="container mt-5">
+  <div class="row text-center">
+    <div class="col-sm-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Misión</h5>
+          <p class="card-text">
+            Brindar acceso a granos básicos frescos, <strong> confiables y accesibles, fortaleciendo la alimentación de las  </strong>, familias nicaragüenses
+            y apoyando la producción local con compromiso y calidad.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Visión</h5>
+          <p class="card-text">
+            Ser reconocidos como una tienda en línea confiable, donde cada persona pueda abastecerse fácilmente de productos esenciales,  entregados con responsabilidad.
+            <strong>cultivados con orgullo </strong>. 
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Objetivo</h5>
+          <p class="card-text">
+            Ofrecer granos básicos de alta calidad  <strong> y brindar experiencias comodas para nuestros clientes</strong>
+            
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Valores -->
+<div class="container mt-5">
+  <h2 class="text-center mb-4">NUESTROS VALORES</h2>
+  <div class="row text-center">
+    <div class="col-sm-3">
+      <div class="card shadow-sm">
+        <img src="{{ url_for('static', filename='inova.jpg') }}" class="card-img-top" alt="Innovación">
+        <div class="card-body">
+          <h5 class="card-title">Innovación</h5>
+          <p class="card-text">Mejoramos constantemente nuestros procesos de empaque, atención y entrega para que tu compra sea rápida, limpia y eficiente</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card shadow-sm">
+        <img src="{{ url_for('static', filename='compromiso.jpg') }}" class="card-img-top" alt="Compromiso">
+        <div class="card-body">
+          <h5 class="card-title">Compromiso</h5>
+          <p class="card-text">Acompañamos cada pedido con responsabilidad, asegurando que recibás lo que necesitás, cuando lo necesitás.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card shadow-sm">
+        <img src="{{ url_for('static', filename='accesibilidad.jpg') }}" class="card-img-top" alt="Accesibilidad">
+        <div class="card-body">
+          <h5 class="card-title">Accesibilidad</h5>
+          <p class="card-text">Ofrecemos productos en presentaciones variadas, desde 1 libra hasta sacos grandes, para hogares, negocios y distribuidores.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card shadow-sm">
+        <img src="{{ url_for('static', filename='eficiencia.png') }}" class="card-img-top" alt="Eficiencia">
+        <div class="card-body">
+          <h5 class="card-title">Eficiencia</h5>
+          <p class="card-text">Organizamos cada entrega con precisión, cuidando tiempos, cantidades y calidad en cada envío.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

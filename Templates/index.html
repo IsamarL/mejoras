@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+
+<!-- Carousel -->
+<div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{{ url_for('static', filename='banner3.png') }}" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ url_for('static', filename='banner2.png') }}" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="{{ url_for('static', filename='granoverde.png') }}" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+    <span class="visually-hidden">Anterior</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+    <span class="visually-hidden">Siguiente</span>
+  </button>
+</div>
+
+<!-- Información -->
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Servicios 
+
+</h2>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Venta directa
+
+</h5>
+          <p class="card-text">Arroz, frijoles, maíz y más. Productos frescos, seleccionados y empacados con cuidado.</p>
+          <p class="card-text">valoramos y protegemos las tradiciones locales..</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Presentaciones variadas
+
+</h5>
+          <p class="card-text">Desde 1 lb hasta sacos de 100 lb. Opciones para hogares, negocios y distribuidores.</p>
+          <p class="card-text">Ideal para quienes buscan calidad, buen precio y entrega confiable</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Entregas 
+
+</h5>
+          <p class="card-text">- Envíos a domicilio en Juigalpa y zonas cercanas.
+ </p>
+          <p class="card-text">Coordinación con transportistas para pedidos grandes..</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Servicios -->
+<div class="container mt-5">
+  <h2 class="text-center mb-4">¿Por qué elegirnos?</h2>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ url_for('static', filename='imajen9.jpg') }}" class="card-img-top" alt="Web">
+        <div class="card-body">
+          <h5 class="card-title">- Granos que alimentan con confianza
+
+</h5>
+          <p class="card-text">Seleccionados con cuidado, empacados con higiene y listos para tu cocina.</p>
+          <a href="#" class="btn btn-primary">Ver más</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ url_for('static', filename='imajen5.jpg') }}" class="card-img-top" alt="Productos">
+        <div class="card-body">
+          <h5 class="card-title"> Precios que ayudan a tu economía
+
+</h5>
+          <p class="card-text">Opciones accesibles para hogares, pulperías y negocios. ¡Ahorrás sin sacrificar calidad!
+          </p>
+          <a href="#" class="btn btn-primary">Ver más</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ url_for('static', filename='imajen6.jpg') }}" class="card-img-top" alt="Cursos">
+        <div class="card-body">
+          <h5 class="card-title">Porque apoyás lo nuestro
+
+</h5>
+          <p class="card-text">Al comprar aquí, estás fortaleciendo la producción local y el trabajo de familias nicaragüenses.</p>
+          <a href="#" class="btn btn-primary">Ver más</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
