@@ -43,71 +43,68 @@
   }
 </script>
 
-<div class="container p-5 mt-3">
-  <div class="card">
-    <div class="card-body shadow-lg rounded" style="background: linear-gradient(220deg, #ffffff,#7a9f7a,#355e3b);">
-      <button type="button" class="btn btn-outline-success float-end" data-bs-toggle="modal" data-bs-target="#modalAgregar">
-        Agregar Usuario
-      </button>
+<div class="container py-5">
 
-      <!-- MODAL AGREGAR USUARIO -->
-      <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <form action="{{ url_for('guardar') }}" method="POST">
-              <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="modalAgregarLabel">Registro de Usuario</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-              </div>
-              <div class="modal-body">
-                <div class="form-floating mb-2">
-                  <input type="text" class="form-control" name="nombre" placeholder="Nombre completo" required>
-                  <label>Nombre completo</label>
-                </div>
-                <div class="form-floating mb-2">
-                  <input type="email" class="form-control" name="email" placeholder="Correo electrónico" required>
-                  <label>Correo electrónico</label>
-                </div>
-                <div class="form-floating mb-2">
-                  <input type="text" class="form-control" name="password" placeholder="Contraseña" required>
-                  <label>Contraseña</label>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-              </div>
-            </form>
+  <!-- Botón Agregar Usuario -->
+  <div class="d-flex justify-content-end mb-4">
+    <button type="button" class="btn btn-gradient-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+      <i class="bi bi-person-plus-fill me-2"></i>Agregar Usuario
+    </button>
+  </div>
+
+  <!-- MODAL AGREGAR USUARIO -->
+  <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form action="{{ url_for('guardar') }}" method="POST">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="modalAgregarLabel">Registro de Usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
           </div>
-        </div>
+          <div class="modal-body">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" name="nombre" placeholder="Nombre completo" required>
+              <label>Nombre completo</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" name="email" placeholder="Correo electrónico" required>
+              <label>Correo electrónico</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" name="password" placeholder="Contraseña" required>
+              <label>Contraseña</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-gradient-primary">Guardar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 
   {% if usuarios %}
-    <h2 class="text-center mt-4">Lista de Usuarios</h2>
-    <table class="table table-hover table-striped">
-      <thead class="table-dark">
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Correo</th>
-          <th>Contraseña</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for mostrar in usuarios %}
-        <tr>
-          <td>{{ mostrar.id }}</td>
-          <td>{{ mostrar.nombre }}</td>
-          <td>{{ mostrar.email }}</td>
-          <td>{{ mostrar.password }}</td>
-          <td>
-            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modaledit{{ mostrar.id }}">Editar</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion('{{ url_for('borrarUser', id=mostrar.id) }}')">Eliminar</button>
-          </td>
-        </tr>
+    <div class="row g-4">
+      {% for mostrar in usuarios %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-lg card-user">
+            <div class="card-body">
+              <h5 class="card-title text-center text-primary fw-bold">{{ mostrar.nombre }}</h5>
+              <p class="text-center text-muted"><i class="bi bi-envelope-fill me-1"></i>{{ mostrar.email }}</p>
+              <p class="text-center text-muted"><i class="bi bi-key-fill me-1"></i>{{ mostrar.password }}</p>
+
+              <div class="d-flex justify-content-around mt-3">
+                <button class="btn btn-gradient-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modaledit{{ mostrar.id }}">
+                  <i class="bi bi-pencil-square me-1"></i>Editar
+                </button>
+                <button class="btn btn-gradient-danger btn-sm" onclick="confirmarEliminacion('{{ url_for('borrarUser', id=mostrar.id) }}')">
+                  <i class="bi bi-trash-fill me-1"></i>Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- MODAL EDITAR USUARIO -->
         <div class="modal fade" id="modaledit{{ mostrar.id }}" tabindex="-1" aria-labelledby="modalEditLabel{{ mostrar.id }}" aria-hidden="true">
@@ -120,33 +117,74 @@
                 </div>
                 <div class="modal-body">
                   <input type="hidden" name="id" value="{{ mostrar.id }}">
-                  <div class="form-group mb-2">
+                  <div class="form-group mb-3">
                     <label>Nombre</label>
                     <input type="text" class="form-control" name="nombre" value="{{ mostrar.nombre }}" required>
                   </div>
-                  <div class="form-group mb-2">
+                  <div class="form-group mb-3">
                     <label>Correo</label>
                     <input type="email" class="form-control" name="email" value="{{ mostrar.email }}" required>
                   </div>
-                  <div class="form-group mb-2">
+                  <div class="form-group mb-3">
                     <label>Contraseña</label>
                     <input type="text" class="form-control" name="password" value="{{ mostrar.password }}" required>
                   </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary">Actualizar</button>
+                  <button type="submit" class="btn btn-gradient-primary">Actualizar</button>
                 </div>
               </form>
             </div>
           </div>
         </div>
-        {% endfor %}
-      </tbody>
-    </table>
+
+      {% endfor %}
+    </div>
   {% else %}
-    <p class="text-center mt-4">No hay usuarios registrados.</p>
+    <p class="text-center mt-4 text-white fs-5">No hay usuarios registrados.</p>
   {% endif %}
+
 </div>
+
+<!-- ESTILOS MODERNOS -->
+<style>
+.card-user {
+  border-radius: 15px;
+  background: linear-gradient(145deg, #e0f7fa, #b2ebf2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card-user:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+}
+
+.btn-gradient-success {
+  background: linear-gradient(135deg, #4caf50, #81c784);
+  color: white;
+  transition: all 0.3s ease;
+}
+.btn-gradient-success:hover { transform: translateY(-3px) scale(1.05); }
+
+.btn-gradient-primary {
+  background: linear-gradient(135deg, #2196f3, #64b5f6);
+  color: white;
+  transition: all 0.3s ease;
+}
+.btn-gradient-primary:hover { transform: translateY(-3px) scale(1.05); }
+
+.btn-gradient-danger {
+  background: linear-gradient(135deg, #f44336, #e57373);
+  color: white;
+  transition: all 0.3s ease;
+}
+.btn-gradient-danger:hover { transform: translateY(-3px) scale(1.05); }
+
+.btn-gradient-success:active,
+.btn-gradient-primary:active,
+.btn-gradient-danger:active {
+  transform: scale(0.95);
+}
+</style>
 
 {% endblock %}

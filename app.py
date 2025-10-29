@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_mysqldb import MySQL
 
 # =========================
@@ -20,7 +20,6 @@ mysql = MySQL(app)
 # =========================
 # RUTAS PRINCIPALES
 # =========================
-
 @app.route('/')
 def inicio():
     if 'usuario' in session:
@@ -54,7 +53,6 @@ def contactopost():
 # =========================
 # LOGIN / REGISTRO / LOGOUT
 # =========================
-
 @app.route('/login', methods=['GET'])
 def login():
     return render_template("login.html")
@@ -107,12 +105,26 @@ def logout():
     return redirect(url_for('inicio'))
 
 # =========================
-# PANEL ADMIN
+# PANEL ADMIN CON CONTADORES
 # =========================
 @app.route('/admin')
 def admin():
     if 'usuario' in session and session.get('rol') == 1:
-        return render_template('admin.html')
+        cur = mysql.connection.cursor()
+
+        # Contar usuarios
+        cur.execute("SELECT COUNT(*) AS total_usuarios FROM usuario")
+        total_usuarios = cur.fetchone()['total_usuarios']
+
+        # Contar productos
+        cur.execute("SELECT COUNT(*) AS total_productos FROM producto")
+        total_productos = cur.fetchone()['total_productos']
+
+        cur.close()
+
+        return render_template('admin.html',
+                               total_usuarios=total_usuarios,
+                               total_productos=total_productos)
     else:
         flash('Debes iniciar sesión como administrador para acceder al panel', 'warning')
         return redirect(url_for('login'))
@@ -120,7 +132,6 @@ def admin():
 # =========================
 # LISTAR USUARIOS (CRUD)
 # =========================
-
 @app.route('/listar')
 def listar():
     cur = mysql.connection.cursor()
@@ -166,7 +177,6 @@ def borrarUser(id):
 # =========================
 # LISTAR PRODUCTOS
 # =========================
-
 @app.route('/listar_productos')
 def listar_productos():
     cur = mysql.connection.cursor()
@@ -175,10 +185,17 @@ def listar_productos():
     cur.close()
     return render_template("listar_productos.html", productos=productos)
 
+@app.route('/api/productos')
+def api_productos():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM producto")
+    data = cur.fetchall()
+    cur.close()
+    return jsonify(data)
+
 # =========================
 # AGREGAR PRODUCTOS
 # =========================
-
 @app.route('/listar_productos_agregados', methods=['GET', 'POST'])
 def listar_productos_agregados():
     if request.method == 'POST':
@@ -201,7 +218,6 @@ def listar_productos_agregados():
 # =========================
 # PERFIL DE USUARIO
 # =========================
-
 @app.route('/usuario')
 def usuario():
     if 'usuario' in session:
@@ -209,6 +225,23 @@ def usuario():
     else:
         flash('Debes iniciar sesión para acceder a tu perfil', 'warning')
         return redirect(url_for('login'))
+
+# =========================
+# CONTADOR DINÁMICO (NO NECESARIO PARA USUARIOS/PRODUCTOS)
+# =========================
+contador = 0  # variable global
+
+@app.route('/incrementar', methods=['POST'])
+def incrementar():
+    global contador
+    contador += 1
+    return jsonify({'contador': contador})
+
+@app.route('/decrementar', methods=['POST'])
+def decrementar():
+    global contador
+    contador -= 1
+    return jsonify({'contador': contador})
 
 # =========================
 # MAIN

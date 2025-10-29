@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 
-{% block titulo %} LOGIN {% endblock %}
+{% block titulo %}Login{% endblock %}
 
 {% block contenido %}
 
-<!-- Mostrar mensajes flash -->
+<!-- Mensajes flash -->
 {% with msg = get_flashed_messages(with_categories=True) %}
-<!-- Verifica si hay mensajes flash -->
   {% if msg %}
-    <!-- Itera sobre los mensajes flash y los muestra -->
     {% for category, message in msg %}
-    <!-- Alerta de Bootstrap -->
-      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        <!-- Muestra el mensaje -->
+      <div class="alert alert-{{ category }} alert-dismissible fade show text-center" role="alert">
         <strong>{{ message }}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -20,109 +16,123 @@
   {% endif %}
 {% endwith %}
 
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center" 
+     style="background: linear-gradient(135deg, #74ebd5, #ACB6E5);">
+     
+  <div class="card shadow-lg p-0" style="border-radius: 1rem; max-width: 900px; width: 100%;">
+    <div class="row g-0">
 
-<div class="container-fluid vh-100" style="background: linear-gradient(135deg, #e96161, #7a7a7a);">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-xl-10">
-                <div class="card shadow-lg" style="border-radius: 1rem; background-color: #9acfcd;">
-                    <div class="row g-0">
+      <!-- Panel izquierdo decorativo -->
+      <div class="col-md-5 d-none d-md-flex flex-column justify-content-center align-items-center text-white" 
+           style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 1rem 0 0 1rem;">
+        <i class="bi bi-person-circle display-1 mb-3" 
+           style="text-shadow: 0 5px 20px rgba(0,0,0,0.3);"></i>
+        <h2 class="fw-bold text-center">¡Bienvenido!</h2>
+        <p class="text-center text-light">Si aún no tienes cuenta, regístrate</p>
+        <a href="{{ url_for('Registro') }}" class="btn btn-light btn-lg text-purple fw-bold">
+          <i class="bi bi-person-plus-fill me-2"></i>Registrarse
+        </a>
+      </div>
 
-                        <!-- Panel izquierdo -->
-                        <div class="col-md-6 col-lg-5 d-none d-md-flex h-100">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center p-4 p-md-5 text-white"
-                                 style="background: linear-gradient(135deg, #dfe1e7, #cfb0b1); border-radius: 1rem 0 0 1rem; height: 100%; width: 100%;">
-                                <div class="mb-4">
-                                    <img src="{{ url_for('static', filename='inicio.png') }}" alt="Imagen Panel"
-                                         style="width: 200px; height: 200px; object-fit: cover;">
-                                </div>
-                                <h2 class="fw-bold mb-4 text-center">Bienvenido Nuevamente!</h2>
-                                <p class="mb-5 text-center">Si aún no tienes una cuenta, regístrate aquí</p>
-                                <a href="{{ url_for('Registro') }}" class="btn btn-lg btn-register">Registrarse</a>
-                            </div>
-                        </div>
+      <!-- Panel derecho (login) -->
+      <div class="col-md-7 p-5">
+        <h2 class="fw-bold mb-4 text-center text-purple">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+        </h2>
 
-                        <!-- Panel derecho -->
-                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
-                            <div class="card-body p-4 p-lg-5 text-dark">
-                                <h2 class="fw-bold mb-4 text-center">Iniciar Sesión</h2>
+        {% if error %}
+          <div class="alert alert-danger text-center">{{ error }}</div>
+        {% endif %}
 
-                                {% if error %}
-                                <div class="alert alert-danger text-center">
-                                    {{ error }}
-                                </div>
-                                {% endif %}
-
-                                <!-- Botón de Google -->
-                                <div class="d-grid mb-4">
-                                    <button class="btn btn-lg d-flex align-items-center justify-content-center btn-google" type="button">
-                                        <img src="{{ url_for('static', filename='googleicon.png') }}" alt="Google"
-                                             style="width: 20px; height: 20px; margin-right: 10px;">
-                                        Iniciar sesión con Google
-                                    </button>
-                                </div>
-
-                                <!-- Separador -->
-                                <div class="d-flex justify-content-center my-4">
-                                    <p class="fw-bold mb-0 text-center text-muted">o Usar tu email para registrarte</p>
-                                </div>
-
-                                <!-- Formulario de login -->
-                                <form action="{{ url_for('accesologin') }}" method="POST">
-                                    <div class="form-outline mb-4">
-                                        <input type="email" name="email" class="form-control form-control-lg"
-                                               placeholder="Correo electrónico" required />
-                                    </div>
-                                    <div class="form-outline mb-4">
-                                        <input type="password" name="password" class="form-control form-control-lg"
-                                               placeholder="Contraseña" required />
-                                    </div>
-                                    <div class="d-grid">
-                                        <button class="btn btn-lg btn-login" type="submit">Iniciar Sesión</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+        <!-- Botón Google -->
+        <div class="d-grid mb-3">
+          <button class="btn btn-outline-dark btn-google d-flex align-items-center justify-content-center">
+            <i class="bi bi-google fs-4 me-2"></i> Iniciar sesión con Google
+          </button>
         </div>
+
+        <p class="text-center fw-bold text-muted my-3">o usar tu correo electrónico</p>
+
+        <!-- Formulario -->
+        <form id="loginForm" action="{{ url_for('accesologin') }}" method="POST">
+          <div class="form-floating mb-3 position-relative">
+            <input type="email" name="email" class="form-control" id="floatingEmail" placeholder="Correo">
+            <label for="floatingEmail"><i class="bi bi-envelope-fill me-2"></i>Correo electrónico</label>
+          </div>
+          <div class="form-floating mb-4 position-relative">
+            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña">
+            <label for="floatingPassword"><i class="bi bi-lock-fill me-2"></i>Contraseña</label>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-purple btn-lg fw-bold">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+            </button>
+          </div>
+        </form>
+      </div>
+
     </div>
+  </div>
 </div>
 
+<!-- Estilos personalizados -->
 <style>
-/* Botón Registrarse */
-.btn-register {
-    background-color: #28a745 !important;
-    color: white !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.1s ease-in-out;
+.text-purple { color: #6a1b9a; }
+.btn-purple { 
+  background: linear-gradient(135deg, #8e2de2, #4a00e0); 
+  color: #fff; 
+  transition: all 0.3s ease; 
 }
-.btn-register:active { transform: scale(0.95); }
+.btn-purple:hover { 
+  transform: scale(1.05); 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+}
 
-/* Botón Google */
-.btn-google {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: none !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.1s ease-in-out;
-}
-.btn-google img { margin-right: 10px; }
-.btn-google:active { transform: scale(0.95); }
+.btn-google { transition: all 0.3s ease; }
+.btn-google:hover { transform: scale(1.05); }
 
-/* Botón Iniciar Sesión */
-.btn-login {
-    background: linear-gradient(135deg, #e2e05e, #f33ca7) !important;
-    color: white !important;
-    border: none !important;
-    transition: transform 0.1s ease-in-out;
+.form-control:focus + label i,
+.form-control:not(:placeholder-shown) + label i {
+  animation: bounce 0.6s;
+  color: #6a1b9a;
 }
-.btn-login:active { transform: scale(0.95); }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
 </style>
+
+<!-- SweetAlert2 validación campos -->
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('floatingEmail').value.trim();
+    const password = document.getElementById('floatingPassword').value.trim();
+
+    if (!email || !password) {
+        Swal.fire({
+            title: 'Validando campos...',
+            html: 'Por favor, completa todos los campos',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+            timer: 1500,
+            timerProgressBar: true,
+        }).then(() => {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campos vacíos',
+                text: 'Todos los campos son obligatorios',
+                confirmButtonColor: '#6a1b9a'
+            });
+        });
+        return;
+    }
+
+    this.submit();
+});
+</script>
+
 {% endblock %}
