@@ -1,9 +1,7 @@
 {% extends 'baseadmin.html' %}
-
 {% block title %}Agregar Producto{% endblock %}
 
 {% block body %}
-
 <!-- ALERTAS CON SWEETALERT2 -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -15,7 +13,7 @@
           icon: '{{ category }}',
           title: '{{ message }}',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 2500,
           timerProgressBar: true
         });
       </script>
@@ -24,29 +22,30 @@
 {% endwith %}
 
 <div class="container py-5">
-  <div class="card shadow-lg card-product">
+  <div class="card shadow-lg card-product animate__animated animate__fadeIn">
     <div class="card-header bg-gradient-primary text-white text-center">
-      <h4>Registrar Nuevo Producto</h4>
+      <h4><i class="bi bi-box-fill me-2"></i>Registrar Nuevo Producto</h4>
     </div>
-    <div class="card-body p-4">
-      <form action="{{ url_for('listar_productos_agregados') }}" method="POST">
 
-        <div class="form-floating mb-3 position-relative">
+    <div class="card-body p-4">
+      <form id="productoForm" action="{{ url_for('listar_productos_agregados') }}" method="POST">
+
+        <div class="form-floating mb-3 position-relative" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingresa el nombre del producto que deseas agregar.">
           <input type="text" class="form-control" name="nombre" placeholder="Nombre del producto" required>
           <label><i class="bi bi-tag-fill me-2"></i>Nombre del producto</label>
         </div>
 
-        <div class="form-floating mb-3 position-relative">
+        <div class="form-floating mb-3 position-relative" data-bs-toggle="tooltip" data-bs-placement="top" title="Escribe una descripción breve y clara del producto.">
           <textarea class="form-control" name="descripcion" placeholder="Descripción" style="height: 100px" required></textarea>
           <label><i class="bi bi-card-text me-2"></i>Descripción</label>
         </div>
 
-        <div class="form-floating mb-3 position-relative">
+        <div class="form-floating mb-3 position-relative" data-bs-toggle="tooltip" data-bs-placement="top" title="Introduce el precio en dólares. Usa punto (.) para los decimales.">
           <input type="number" step="0.01" class="form-control" name="precio" placeholder="Precio" required>
           <label><i class="bi bi-currency-dollar me-2"></i>Precio</label>
         </div>
 
-        <div class="form-floating mb-4 position-relative">
+        <div class="form-floating mb-4 position-relative" data-bs-toggle="tooltip" data-bs-placement="top" title="Indica la cantidad disponible en inventario.">
           <input type="number" class="form-control" name="stock" placeholder="Stock" required>
           <label><i class="bi bi-box-seam me-2"></i>Stock</label>
         </div>
@@ -59,21 +58,50 @@
             <i class="bi bi-x-circle-fill me-1"></i>Cancelar
           </a>
         </div>
-
       </form>
     </div>
   </div>
 </div>
 
+<!-- SCRIPTS DINÁMICOS -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(el => new bootstrap.Tooltip(el))
+
+    // Validación dinámica
+    const form = document.getElementById('productoForm');
+    form.addEventListener('submit', (e) => {
+      let valid = true;
+      form.querySelectorAll('input, textarea').forEach(field => {
+        if (!field.value.trim()) {
+          valid = false;
+          field.classList.add('is-invalid');
+          Swal.fire({
+            icon: 'warning',
+            title: 'Campo vacío',
+            text: `Por favor, completa el campo "${field.name}" antes de continuar.`,
+            confirmButtonColor: '#2a5298'
+          });
+        } else {
+          field.classList.remove('is-invalid');
+        }
+      });
+      if (!valid) e.preventDefault();
+    });
+  });
+</script>
+
 <!-- ESTILOS MODERNOS -->
 <style>
 .card-product {
-  border-radius: 15px;
+  border-radius: 18px;
   background: linear-gradient(145deg, #e3f2fd, #bbdefb);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .card-product:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.3);
 }
 
@@ -84,6 +112,7 @@
 .btn-gradient-success {
   background: linear-gradient(135deg, #43e97b, #38f9d7);
   color: white;
+  border: none;
   transition: all 0.3s ease;
 }
 .btn-gradient-success:hover { transform: translateY(-3px) scale(1.05); }
@@ -91,26 +120,36 @@
 .btn-gradient-secondary {
   background: linear-gradient(135deg, #b0bec5, #78909c);
   color: white;
+  border: none;
   transition: all 0.3s ease;
 }
 .btn-gradient-secondary:hover { transform: translateY(-3px) scale(1.05); }
 
-.btn-gradient-success:active,
-.btn-gradient-secondary:active {
-  transform: scale(0.95);
+.form-control:focus {
+  border-color: #2a5298;
+  box-shadow: 0 0 6px rgba(42, 82, 152, 0.5);
+}
+.is-invalid {
+  border-color: #dc3545 !important;
+  animation: shake 0.2s 2;
 }
 
-/* Animación iconos en inputs */
-.form-control:focus + label i,
-.form-control:not(:placeholder-shown) + label i {
-  color: #1e3c72;
-  animation: bounce 0.5s;
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+.tooltip-inner {
+  background-color: #2a5298 !important;
+  color: #fff !important;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-top-color: #2a5298 !important;
 }
 </style>
-
 {% endblock %}

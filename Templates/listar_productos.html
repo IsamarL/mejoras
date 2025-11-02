@@ -1,19 +1,166 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Lista de Productos</title>
 
-<!-- Bootstrap 5 -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-<!-- DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/colvis/1.3.1/css/buttons.colVis.min.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/colvis/1.3.1/css/buttons.colVis.min.css" />
 
-<!-- jQuery y DataTables JS -->
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+<style>
+  body {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    font-family: 'Poppins', sans-serif;
+    padding: 30px;
+    color: #333;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #5a5a86;
+    letter-spacing: 1.2px;
+    text-shadow: 1px 1px 3px rgba(90, 90, 134, 0.3);
+  }
+
+  /* Tabla Moderna */
+  table.dataTable {
+    width: 100% !important;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #ffffffcc;
+    color: #444;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  table.dataTable thead {
+    background: linear-gradient(90deg, #a1c4fd, #c2e9fb);
+    color: #3a3a5c;
+    font-weight: 700;
+  }
+  table.dataTable tbody tr {
+    transition: background-color 0.25s ease, transform 0.15s ease;
+    cursor: pointer;
+  }
+  table.dataTable tbody tr:hover {
+    background-color: #e1eaff;
+    transform: scale(1.02);
+  }
+
+  /* Botón agregar */
+  .btn-agregar {
+    background: linear-gradient(135deg, #84fab0, #8fd3f4);
+    color: #355070;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 15px;
+    font-weight: 700;
+    box-shadow: 0 6px 20px rgba(135, 175, 223, 0.6);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+  }
+  .btn-agregar i {
+    margin-right: 10px;
+    font-size: 1.3rem;
+  }
+  .btn-agregar:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 35px rgba(135, 175, 223, 0.8);
+    color: #274156;
+  }
+
+  /* Botones de acción */
+  .btn-accion {
+    border-radius: 12px;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.25s ease;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    border: none;
+  }
+  .btn-accion i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+  }
+  .btn-accion:hover i {
+    transform: scale(1.2);
+  }
+  .btn-accion:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  }
+  .btn-editar {
+    background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    color: #2c3e50;
+  }
+  .btn-eliminar {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: #721c24;
+  }
+
+  /* Tooltips personalizados */
+  .tooltip-inner {
+    background-color: #66a6ff !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+  .tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: #66a6ff !important;
+  }
+
+  /* Animación entrada tabla */
+  #tablaProductos {
+    animation: fadeInUp 0.7s ease;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<h2>📦 Productos Registrados</h2>
+
+<div class="text-end mb-3">
+  <a href="/listar_productos_agregados" class="btn-agregar" data-bs-toggle="tooltip" data-bs-placement="top" title="Registrar un nuevo producto en el sistema.">
+    <i class="bi bi-plus-circle"></i> Agregar Producto
+  </a>
+</div>
+
+<table id="tablaProductos" class="display nowrap table table-hover" style="width:100%">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Precio</th>
+      <th>Stock</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+</table>
+
+<!-- jQuery + DataTables + Extensiones -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
@@ -24,167 +171,108 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Bootstrap Icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-<style>
-body {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    font-family: 'Arial', sans-serif;
-    padding: 30px;
-    color: #fff;
-}
-h2 {
-    text-align: center;
-    margin-bottom: 25px;
-    font-weight: 700;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
-}
-.dt-buttons {
-    margin-bottom: 15px;
-}
-table.dataTable {
-    width: 100% !important;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: #fff;
-    color: #000;
-}
-table.dataTable thead {
-    background: linear-gradient(90deg, #6a11cb, #2575fc);
-    color: #fff;
-}
-table.dataTable tbody tr:hover {
-    background-color: #d2e3fc;
-}
-
-/* Botón agregar producto */
-.btn-agregar {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: #fff;
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 8px;
-    font-weight: 600;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-}
-.btn-agregar i {
-    margin-right: 5px;
-}
-.btn-agregar:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.3);
-    background: linear-gradient(135deg, #5a0fb8, #1f4dbd);
-}
-
-/* Botones de acción */
-.btn-accion {
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-weight: 600;
-    font-size: 13px;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.btn-accion i {
-    margin-right: 4px;
-}
-.btn-accion:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-}
-.btn-editar {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
-    color: #fff;
-    border: none;
-}
-.btn-eliminar {
-    background: linear-gradient(135deg, #ff416c, #ff6b81);
-    color: #fff;
-    border: none;
-}
-</style>
-</head>
-<body>
-
-<h2>Productos Registrados</h2>
-
-<a href="/listar_productos_agregados" class="btn-agregar mb-3">
-    <i class="bi bi-plus-circle"></i> Agregar Producto
-</a>
-
-<table id="tablaProductos" class="display nowrap table table-hover" style="width:100%">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-</table>
-
 <script>
 $(document).ready(function() {
-    $('#tablaProductos').DataTable({
-        ajax: {
-            url: '/api/productos',
-            dataSrc: function(json) { return json.data || json; }
-        },
-        columns: [
-            { data: 'id' },
-            { data: 'nombre' },
-            { data: 'descripcion' },
-            { data: 'precio', render: function(data) { return 'C$ ' + parseFloat(data||0).toFixed(2); } },
-            { data: 'stock' },
-            { data: 'id', render: function(id) {
-                return `
-                <button class="btn btn-editar btn-accion" onclick="window.location.href='/editar_producto/${id}'">
-                    <i class="bi bi-pencil-square"></i> Editar
-                </button>
-                <button class="btn btn-eliminar btn-accion" onclick="confirmarEliminacion(${id})">
-                    <i class="bi bi-trash-fill"></i> Eliminar
-                </button>
-                `;
-            }}
-        ],
-        dom: 'Bfrtip',
-        buttons: [
-            { extend: 'copy', text: '📋 Copiar' },
-            { extend: 'excelHtml5', text: '📊 Excel' },
-            { extend: 'pdfHtml5', text: '📄 PDF' },
-            { extend: 'print', text: '🖨️ Imprimir' },
-            { extend: 'colvis', text: '🧩 Columnas' }
-        ],
-        language: { url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json" },
-        responsive: true,
-        autoWidth: false
-    });
+  // Inicializa tooltips Bootstrap
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
+
+  // Inicializa DataTable
+  const tabla = $('#tablaProductos').DataTable({
+    ajax: {
+      url: '/api/productos',
+      dataSrc: function(json) {
+        if (!json || !json.length) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Sin productos',
+            text: 'Actualmente no hay productos registrados.',
+            confirmButtonColor: '#66a6ff'
+          });
+        }
+        return json.data || json;
+      }
+    },
+    columns: [
+      { data: 'id' },
+      { data: 'nombre' },
+      { data: 'descripcion' },
+      { data: 'precio', render: function(data) { return 'C$ ' + parseFloat(data||0).toFixed(2); } },
+      { data: 'stock' },
+      { 
+        data: 'id', 
+        render: function(id) {
+          return `
+            <button class="btn btn-editar btn-accion me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar este producto" onclick="confirmarEdicion(${id})">
+              <i class="bi bi-pencil-square"></i> Editar
+            </button>
+            <button class="btn btn-eliminar btn-accion" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar este producto" onclick="confirmarEliminacion(${id})">
+              <i class="bi bi-trash-fill"></i> Eliminar
+            </button>
+          `;
+        }
+      }
+    ],
+    dom: 'Bfrtip',
+    buttons: [
+      { extend: 'copy', text: '📋 Copiar' },
+      { extend: 'excelHtml5', text: '📊 Excel' },
+      { extend: 'pdfHtml5', text: '📄 PDF' },
+      { extend: 'print', text: '🖨️ Imprimir' },
+      { extend: 'colvis', text: '🧩 Columnas' }
+    ],
+    language: { url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json" },
+    responsive: true,
+    autoWidth: false
+  });
 });
 
-// SweetAlert2 confirmación
+// Confirmación eliminación con SweetAlert2
 function confirmarEliminacion(id){
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = `/api/eliminar_producto/${id}`;
-        }
-    });
+  Swal.fire({
+    title: '¿Deseas eliminar este producto?',
+    text: "Esta acción no se puede deshacer.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ff9a9e',
+    cancelButtonColor: '#66a6ff',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Eliminado',
+        text: 'El producto ha sido eliminado correctamente.',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      setTimeout(() => window.location.href = `/api/eliminar_producto/${id}`, 1500);
+    }
+  });
+}
+
+// Confirmación edición con SweetAlert2
+function confirmarEdicion(id){
+  Swal.fire({
+    title: '¿Deseas editar este producto?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#66a6ff',
+    cancelButtonColor: '#aaa',
+    confirmButtonText: 'Sí, editar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if(result.isConfirmed) {
+      window.location.href = `/editar_producto/${id}`;
+    }
+  });
 }
 </script>
 

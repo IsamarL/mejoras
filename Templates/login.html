@@ -1,138 +1,212 @@
 {% extends 'base.html' %}
-
 {% block titulo %}Login{% endblock %}
-
 {% block contenido %}
 
-<!-- Mensajes flash -->
-{% with msg = get_flashed_messages(with_categories=True) %}
-  {% if msg %}
-    {% for category, message in msg %}
-      <div class="alert alert-{{ category }} alert-dismissible fade show text-center" role="alert">
-        <strong>{{ message }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+<!-- CONTENEDOR PRINCIPAL -->
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center position-relative" 
+     style="overflow: hidden;">
 
-<div class="container-fluid vh-100 d-flex justify-content-center align-items-center" 
-     style="background: linear-gradient(135deg, #74ebd5, #ACB6E5);">
-     
-  <div class="card shadow-lg p-0" style="border-radius: 1rem; max-width: 900px; width: 100%;">
+  <!-- Fondo animado -->
+  <div id="background-animation"></div>
+
+  <div class="card shadow-lg border-0 glass-card animate__animated animate__fadeIn" 
+       style="border-radius: 1rem; max-width: 900px; width: 100%; z-index: 10;">
     <div class="row g-0">
 
-      <!-- Panel izquierdo decorativo -->
+      <!-- PANEL IZQUIERDO -->
       <div class="col-md-5 d-none d-md-flex flex-column justify-content-center align-items-center text-white" 
-           style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 1rem 0 0 1rem;">
-        <i class="bi bi-person-circle display-1 mb-3" 
-           style="text-shadow: 0 5px 20px rgba(0,0,0,0.3);"></i>
-        <h2 class="fw-bold text-center">¡Bienvenido!</h2>
-        <p class="text-center text-light">Si aún no tienes cuenta, regístrate</p>
-        <a href="{{ url_for('Registro') }}" class="btn btn-light btn-lg text-purple fw-bold">
+           style="background: linear-gradient(135deg, #6a11cb, #2575fc); border-radius: 1rem 0 0 1rem;">
+        <i class="bi bi-person-circle display-1 mb-3" style="text-shadow: 0 5px 15px rgba(0,0,0,0.3);"></i>
+        <h2 class="fw-bold">¡Bienvenido!</h2>
+        <p class="text-light text-center px-3">Accede a tu cuenta o crea una nueva para descubrir más.</p>
+        <a href="{{ url_for('Registro') }}" class="btn btn-light fw-bold btn-lg shadow-sm mt-2"
+           style="border-radius: 50px; transition: 0.3s;"
+           onmouseover="this.style.transform='scale(1.05)'"
+           onmouseout="this.style.transform='scale(1)'">
           <i class="bi bi-person-plus-fill me-2"></i>Registrarse
         </a>
       </div>
 
-      <!-- Panel derecho (login) -->
-      <div class="col-md-7 p-5">
-        <h2 class="fw-bold mb-4 text-center text-purple">
+      <!-- PANEL DERECHO -->
+      <div class="col-md-7 bg-white bg-opacity-75 p-5 rounded-end position-relative">
+        <h2 class="fw-bold mb-4 text-center text-gradient">
           <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
         </h2>
 
-        {% if error %}
-          <div class="alert alert-danger text-center">{{ error }}</div>
-        {% endif %}
-
         <!-- Botón Google -->
         <div class="d-grid mb-3">
-          <button class="btn btn-outline-dark btn-google d-flex align-items-center justify-content-center">
+          <button type="button" class="btn btn-outline-dark btn-google d-flex align-items-center justify-content-center shadow-sm">
             <i class="bi bi-google fs-4 me-2"></i> Iniciar sesión con Google
           </button>
         </div>
 
-        <p class="text-center fw-bold text-muted my-3">o usar tu correo electrónico</p>
+        <p class="text-center fw-bold text-muted my-3">o usa tu correo electrónico</p>
 
-        <!-- Formulario -->
-        <form id="loginForm" action="{{ url_for('accesologin') }}" method="POST">
-          <div class="form-floating mb-3 position-relative">
-            <input type="email" name="email" class="form-control" id="floatingEmail" placeholder="Correo">
+        <form id="loginForm" action="{{ url_for('accesologin') }}" method="POST" novalidate>
+          <div class="form-floating mb-3 position-relative" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingresa tu correo electrónico válido">
+            <input type="email" class="form-control input-modern" id="floatingEmail" name="email" placeholder="Correo" required>
             <label for="floatingEmail"><i class="bi bi-envelope-fill me-2"></i>Correo electrónico</label>
+            <i class="bi bi-check-circle-fill valid-icon text-success position-absolute end-0 top-50 translate-middle-y me-3 d-none"></i>
           </div>
-          <div class="form-floating mb-4 position-relative">
-            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Contraseña">
+
+          <div class="form-floating mb-4 position-relative" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingresa tu contraseña correctamente">
+            <input type="password" class="form-control input-modern" id="floatingPassword" name="password" placeholder="Contraseña" required>
             <label for="floatingPassword"><i class="bi bi-lock-fill me-2"></i>Contraseña</label>
+            <i class="bi bi-check-circle-fill valid-icon text-success position-absolute end-0 top-50 translate-middle-y me-3 d-none"></i>
           </div>
+
           <div class="d-grid">
-            <button type="submit" class="btn btn-purple btn-lg fw-bold">
+            <button type="submit" class="btn btn-gradient fw-bold btn-lg shadow-sm">
               <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
             </button>
           </div>
         </form>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- Estilos personalizados -->
+<!-- ESTILOS -->
 <style>
-.text-purple { color: #6a1b9a; }
-.btn-purple { 
-  background: linear-gradient(135deg, #8e2de2, #4a00e0); 
-  color: #fff; 
-  transition: all 0.3s ease; 
+#background-animation {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(270deg, #74ebd5, #ACB6E5, #6a11cb, #2575fc);
+  background-size: 800% 800%;
+  animation: gradientBG 15s ease infinite;
+  filter: blur(40px);
+  z-index: -1;
 }
-.btn-purple:hover { 
-  transform: scale(1.05); 
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+@keyframes gradientBG {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
 }
-
-.btn-google { transition: all 0.3s ease; }
-.btn-google:hover { transform: scale(1.05); }
-
-.form-control:focus + label i,
-.form-control:not(:placeholder-shown) + label i {
-  animation: bounce 0.6s;
-  color: #6a1b9a;
+.glass-card {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.7);
+  transition: 0.4s ease-in-out;
 }
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+.glass-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.text-gradient {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.btn-gradient {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  transition: 0.3s;
+}
+.btn-gradient:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(106,17,203,0.4);
+}
+.input-modern {
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+.input-modern:focus {
+  border-color: #6a11cb;
+  box-shadow: 0 0 8px rgba(106,17,203,0.3);
+}
+.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 6px rgba(220,53,69,0.3);
+}
+.shake {
+  animation: shake 0.4s;
+}
+@keyframes shake {
+  0%,100%{transform:translateX(0);}
+  25%{transform:translateX(-4px);}
+  50%{transform:translateX(4px);}
+  75%{transform:translateX(-4px);}
+}
+.valid-icon {
+  pointer-events: none;
+  font-size: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
 
-<!-- SweetAlert2 validación campos -->
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = document.getElementById('floatingEmail').value.trim();
-    const password = document.getElementById('floatingPassword').value.trim();
+  // Inicializa tooltips Bootstrap
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
 
-    if (!email || !password) {
-        Swal.fire({
-            title: 'Validando campos...',
-            html: 'Por favor, completa todos los campos',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            },
-            timer: 1500,
-            timerProgressBar: true,
-        }).then(() => {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Campos vacíos',
-                text: 'Todos los campos son obligatorios',
-                confirmButtonColor: '#6a1b9a'
-            });
-        });
-        return;
+  const form = document.getElementById('loginForm');
+  const inputs = form.querySelectorAll('.form-control');
+
+  inputs.forEach(input => {
+    const icon = input.parentElement.querySelector('.valid-icon');
+    input.addEventListener('input', () => {
+      if (input.value.trim() !== '') {
+        input.classList.remove('is-invalid');
+        icon.classList.remove('d-none');
+      } else {
+        icon.classList.add('d-none');
+      }
+    });
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let valid = true;
+
+    inputs.forEach(input => {
+      const icon = input.parentElement.querySelector('.valid-icon');
+      if (!input.value.trim()) {
+        valid = false;
+        input.classList.add('is-invalid', 'shake');
+        icon.classList.add('d-none');
+        const tooltip = bootstrap.Tooltip.getInstance(input) || new bootstrap.Tooltip(input);
+        tooltip.show();
+        setTimeout(() => {
+          tooltip.hide();
+          input.classList.remove('shake');
+        }, 1200);
+      }
+    });
+
+    if (!valid) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos vacíos',
+        text: 'Por favor, completa todos los campos antes de continuar.',
+        confirmButtonColor: '#6a11cb',
+        background: '#fff',
+        showClass: { popup: 'animate__animated animate__shakeX' },
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("https://media.giphy.com/media/MaI6BylfjAkDk/giphy.gif")
+          left top
+          no-repeat
+        `
+      });
+      return;
     }
 
-    this.submit();
-});
+    // Simulación de éxito antes de submit real
+    Swal.fire({
+      icon: 'success',
+      title: '¡Bienvenido!',
+      text: 'Inicio de sesión exitoso 🎉',
+      confirmButtonColor: '#2575fc',
+      timer: 1800,
+      showConfirmButton: false
+    }).then(() => form.submit());
+  });
 </script>
 
 {% endblock %}

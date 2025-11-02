@@ -8,11 +8,11 @@ app = Flask(__name__)
 app.secret_key = '09f78ead-8a13-11f0-9f04-089798bc6dda'
 
 # ----------------- CONEXIÓN A MYSQL -----------------
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_PORT'] = 8080
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'ventas'
+app.config['MYSQL_HOST'] = 'bkm28yhgx1tke8ml3dca-mysql.services.clever-cloud.com'
+app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_USER'] = 'uhjjt644tkntmre3'
+app.config['MYSQL_PASSWORD'] = 'lzdqe0dTidT4475nNeez'
+app.config['MYSQL_DB'] = 'bkm28yhgx1tke8ml3dca'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)

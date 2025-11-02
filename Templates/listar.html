@@ -31,8 +31,8 @@
       text: '¡No podrás revertir esto!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#95a5a6',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
@@ -47,7 +47,7 @@
 
   <!-- Botón Agregar Usuario -->
   <div class="d-flex justify-content-end mb-4">
-    <button type="button" class="btn btn-gradient-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+    <button type="button" class="btn btn-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAgregar">
       <i class="bi bi-person-plus-fill me-2"></i>Agregar Usuario
     </button>
   </div>
@@ -55,11 +55,11 @@
   <!-- MODAL AGREGAR USUARIO -->
   <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content rounded-4 shadow">
         <form action="{{ url_for('guardar') }}" method="POST">
-          <div class="modal-header bg-success text-white">
+          <div class="modal-header bg-primary text-white rounded-top-4">
             <h5 class="modal-title" id="modalAgregarLabel">Registro de Usuario</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
           </div>
           <div class="modal-body">
             <div class="form-floating mb-3">
@@ -76,8 +76,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-gradient-primary">Guardar</button>
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">Guardar</button>
           </div>
         </form>
       </div>
@@ -88,18 +88,17 @@
     <div class="row g-4">
       {% for mostrar in usuarios %}
         <div class="col-md-6 col-lg-4">
-          <div class="card shadow-lg card-user">
+          <div class="card shadow-sm rounded-4">
             <div class="card-body">
-              <h5 class="card-title text-center text-primary fw-bold">{{ mostrar.nombre }}</h5>
-              <p class="text-center text-muted"><i class="bi bi-envelope-fill me-1"></i>{{ mostrar.email }}</p>
-              <p class="text-center text-muted"><i class="bi bi-key-fill me-1"></i>{{ mostrar.password }}</p>
-
-              <div class="d-flex justify-content-around mt-3">
-                <button class="btn btn-gradient-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modaledit{{ mostrar.id }}">
-                  <i class="bi bi-pencil-square me-1"></i>Editar
+              <h5 class="card-title text-center text-dark fw-bold">{{ mostrar.nombre }}</h5>
+              <p class="text-center text-muted mb-1"><i class="bi bi-envelope-fill me-2"></i>{{ mostrar.email }}</p>
+              <p class="text-center text-muted mb-3"><i class="bi bi-key-fill me-2"></i>{{ mostrar.password }}</p>
+              <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-outline-primary btn-sm rounded-pill d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modaledit{{ mostrar.id }}" title="Editar Usuario">
+                  <i class="bi bi-pencil"></i> Editar
                 </button>
-                <button class="btn btn-gradient-danger btn-sm" onclick="confirmarEliminacion('{{ url_for('borrarUser', id=mostrar.id) }}')">
-                  <i class="bi bi-trash-fill me-1"></i>Eliminar
+                <button class="btn btn-outline-danger btn-sm rounded-pill d-flex align-items-center gap-1" onclick="confirmarEliminacion('{{ url_for('borrarUser', id=mostrar.id) }}')" title="Eliminar Usuario">
+                  <i class="bi bi-trash"></i> Eliminar
                 </button>
               </div>
             </div>
@@ -109,11 +108,11 @@
         <!-- MODAL EDITAR USUARIO -->
         <div class="modal fade" id="modaledit{{ mostrar.id }}" tabindex="-1" aria-labelledby="modalEditLabel{{ mostrar.id }}" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content rounded-4 shadow">
               <form action="{{ url_for('updateUsuario') }}" method="POST">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header bg-primary text-white rounded-top-4">
                   <h5 class="modal-title" id="modalEditLabel{{ mostrar.id }}">Editar Usuario</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
                   <input type="hidden" name="id" value="{{ mostrar.id }}">
@@ -131,8 +130,8 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-gradient-primary">Actualizar</button>
+                  <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary rounded-pill px-4">Actualizar</button>
                 </div>
               </form>
             </div>
@@ -142,48 +141,144 @@
       {% endfor %}
     </div>
   {% else %}
-    <p class="text-center mt-4 text-white fs-5">No hay usuarios registrados.</p>
+    <p class="text-center mt-4 text-secondary fs-5">No hay usuarios registrados.</p>
+  {% endif %}
+
+  <!-- GRÁFICO MODERNO DE USUARIOS -->
+  {% if usuarios %}
+  <div class="mt-5 p-4 rounded-4 bg-light shadow" style="max-width: 800px; margin: auto;">
+    <h5 class="text-center mb-3 text-primary fw-semibold">Usuarios Registrados</h5>
+    <canvas id="graficoUsuarios" height="300"></canvas>
+  </div>
   {% endif %}
 
 </div>
 
-<!-- ESTILOS MODERNOS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+{% if usuarios %}
+const ctx = document.getElementById('graficoUsuarios').getContext('2d');
+
+const nombresUsuarios = [{% for u in usuarios %}'{{ u.nombre }}',{% endfor %}];
+const fechasRegistro = [{% for u in usuarios %}'{{ u.fecha_registro }}',{% endfor %}];
+
+// Colores suaves y modernos
+const colors = nombresUsuarios.map((_, i) => {
+    const r = 102 + i*10;
+    const g = 126 + i*5;
+    const b = 234 - i*10;
+    return `rgba(${r}, ${g}, ${b}, 0.7)`;
+});
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: nombresUsuarios.map(n => n.length > 15 ? n.substr(0,15) + '...' : n),
+        datasets: [{
+            label: 'Fecha de Registro',
+            data: fechasRegistro.map(() => 1),
+            backgroundColor: colors,
+            borderRadius: 6,
+            barThickness: 28
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#fff',
+                titleColor: '#000',
+                bodyColor: '#000',
+                callbacks: {
+                    label: function(context) {
+                        return `Registrado: ${fechasRegistro[context.dataIndex]}`;
+                    }
+                }
+            }
+        },
+        scales: {
+            x: { display: false },
+            y: {
+                ticks: { color: '#333', font: { size: 14 } },
+                grid: { display: false }
+            }
+        }
+    }
+});
+{% endif %}
+</script>
+
 <style>
-.card-user {
+/* Tarjetas limpias con sombra suave */
+.card {
   border-radius: 15px;
-  background: linear-gradient(145deg, #e0f7fa, #b2ebf2);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.card-user:hover {
+
+.card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
 }
 
-.btn-gradient-success {
-  background: linear-gradient(135deg, #4caf50, #81c784);
-  color: white;
+/* Botones estilizados y modernos */
+.btn-primary {
+  background: linear-gradient(135deg, #4a90e2, #357ABD);
+  border: none;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
   transition: all 0.3s ease;
 }
-.btn-gradient-success:hover { transform: translateY(-3px) scale(1.05); }
 
-.btn-gradient-primary {
-  background: linear-gradient(135deg, #2196f3, #64b5f6);
-  color: white;
-  transition: all 0.3s ease;
+.btn-primary:hover {
+  background: linear-gradient(135deg, #357ABD, #285a8e);
+  box-shadow: 0 6px 18px rgba(53, 122, 189, 0.6);
+  transform: scale(1.05);
 }
-.btn-gradient-primary:hover { transform: translateY(-3px) scale(1.05); }
 
-.btn-gradient-danger {
-  background: linear-gradient(135deg, #f44336, #e57373);
-  color: white;
+.btn-outline-primary {
+  color: #357ABD;
+  border: 2px solid #357ABD;
+  background: transparent;
   transition: all 0.3s ease;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 0.25rem 1rem;
 }
-.btn-gradient-danger:hover { transform: translateY(-3px) scale(1.05); }
 
-.btn-gradient-success:active,
-.btn-gradient-primary:active,
-.btn-gradient-danger:active {
+.btn-outline-primary:hover {
+  background: #357ABD;
+  color: white;
+  box-shadow: 0 4px 14px rgba(53, 122, 189, 0.5);
+  transform: scale(1.05);
+}
+
+.btn-outline-danger {
+  color: #e74c3c;
+  border: 2px solid #e74c3c;
+  background: transparent;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  border-radius: 30px;
+  padding: 0.25rem 1rem;
+}
+
+.btn-outline-danger:hover {
+  background: #e74c3c;
+  color: white;
+  box-shadow: 0 4px 14px rgba(231, 76, 60, 0.6);
+  transform: scale(1.05);
+}
+
+/* Transiciones suaves al presionar */
+.btn-primary:active,
+.btn-outline-primary:active,
+.btn-outline-danger:active {
   transform: scale(0.95);
+  box-shadow: none;
 }
 </style>
 
