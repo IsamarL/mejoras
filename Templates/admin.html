@@ -4,6 +4,9 @@
 
 {% block body %}
 
+<!-- Google Fonts para Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+
 <!-- Mensajes flash con SweetAlert2 -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -54,8 +57,8 @@
 <!-- Estilos Modernos -->
 <style>
   body {
-    background: #f5f7fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #76a5eb;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   .container {
@@ -63,7 +66,7 @@
   }
 
   h2 {
-    font-weight: 700;
+    font-weight: 900;
     margin-bottom: 2rem;
     color: #34495e;
   }
@@ -74,6 +77,10 @@
     box-shadow: 0 8px 20px rgba(50, 50, 93, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
+    height: 230px; /* tamaño fijo para que sean iguales */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .card:hover {
@@ -82,43 +89,47 @@
   }
 
   .card-body {
-    padding: 2rem;
+    padding: 1.5rem 2rem;
+    text-align: center;
   }
 
   .card-title {
-    font-weight: 600;
-    font-size: 1.3rem;
+    font-weight: 700;
+    font-size: 1.2rem;
     color: #2c3e50;
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 1.5rem;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
   }
 
   .card-title i {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #2980b9;
     transition: transform 0.3s ease;
   }
 
   .card:hover .card-title i {
-    transform: scale(1.4);
+    transform: scale(1.3);
     color: #3498db;
   }
 
   .display-6 {
-    font-size: 3.5rem;
-    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 3rem;
     color: #34495e;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .btn-outline-success {
     font-weight: 600;
     border-radius: 50px;
-    padding: 0.6rem 1.8rem;
+    padding: 0.4rem 1.2rem;
     border-width: 2px;
     color: #27ae60;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
   }
 
@@ -131,10 +142,10 @@
 
   /* Gradientes suaves para cada card */
   .card-usuarios {
-    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    background: linear-gradient(135deg, #bef3f0, #fed6e3);
   }
   .card-registrar {
-    background: linear-gradient(135deg, #f6f9fc, #e3f2fd);
+    background: linear-gradient(135deg, #f6f9fc, #d3fdd9);
   }
   .card-productos {
     background: linear-gradient(135deg, #c6f7e2, #e0f7fa);
@@ -143,10 +154,10 @@
   /* Responsive */
   @media (max-width: 767px) {
     .card-title i {
-      font-size: 2rem;
+      font-size: 1.6rem;
     }
     .display-6 {
-      font-size: 2.5rem;
+      font-size: 2rem;
     }
   }
 </style>
@@ -159,12 +170,18 @@
     <!-- Card Usuarios -->
     <div class="col-md-4 col-sm-6">
       <div class="card shadow-sm card-usuarios">
-        <div class="card-body text-center">
+        <div class="card-body">
           <h5 class="card-title">
             <i class="bi bi-people-fill"></i> Usuarios Registrados
           </h5>
           <p class="display-6">{{ total_usuarios }}</p>
-          <a href="{{ url_for('listar') }}" class="btn btn-outline-success">Ver Detalles</a>
+          <a href="{{ url_for('listar') }}" 
+             class="btn btn-outline-success" 
+             data-bs-toggle="tooltip" 
+             data-bs-placement="top" 
+             title="Ver detalles de usuarios">
+            Ver Detalles
+          </a>
         </div>
       </div>
     </div>
@@ -172,11 +189,17 @@
     <!-- Card Registrar Productos -->
     <div class="col-md-4 col-sm-6">
       <div class="card shadow-sm card-registrar">
-        <div class="card-body text-center">
+        <div class="card-body">
           <h5 class="card-title">
             <i class="bi bi-plus-circle-fill"></i> Registrar Productos
           </h5>
-          <a href="{{ url_for('listar_productos_agregados') }}" class="btn btn-outline-success">Agregar</a>
+          <a href="{{ url_for('listar_productos_agregados') }}" 
+             class="btn btn-outline-success"
+             data-bs-toggle="tooltip"
+             data-bs-placement="top"
+             title="Agregar nuevo producto">
+            Agregar
+          </a>
         </div>
       </div>
     </div>
@@ -184,17 +207,33 @@
     <!-- Card Productos Agregados -->
     <div class="col-md-4 col-sm-6">
       <div class="card shadow-sm card-productos">
-        <div class="card-body text-center">
+        <div class="card-body">
           <h5 class="card-title">
             <i class="bi bi-box-seam"></i> Productos Agregados
           </h5>
           <p class="display-6">{{ total_productos }}</p>
-          <a href="{{ url_for('listar_productos') }}" class="btn btn-outline-success">Ver Detalles</a>
+          <a href="{{ url_for('listar_productos') }}" 
+             class="btn btn-outline-success"
+             data-bs-toggle="tooltip"
+             data-bs-placement="top"
+             title="Ver detalles de productos">
+            Ver Detalles
+          </a>
         </div>
       </div>
     </div>
 
   </div>
 </div>
+
+<!-- Inicializar tooltips -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+      new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  });
+</script>
 
 {% endblock %}

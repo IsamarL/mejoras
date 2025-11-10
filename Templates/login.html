@@ -209,4 +209,17 @@
   });
 </script>
 
+{% if ya_logueado %}
+<script>
+  Swal.fire({
+    icon: 'info',
+    title: 'Ya has iniciado sesión',
+    text: 'No es necesario iniciar sesión de nuevo.',
+    confirmButtonColor: '#2575fc',
+    timer: 2500,
+    showConfirmButton: false
+  });
+</script>
+{% endif %}
+
 {% endblock %}

@@ -62,10 +62,9 @@ def accesologin():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM usuario WHERE email=%s AND password=%s", (email, password))
-    user = cur.fetchone()
-    cur.close()
+    with mysql.connection.cursor() as cur:
+        cur.execute("SELECT * FROM usuario WHERE email=%s AND password=%s", (email, password))
+        user = cur.fetchone()
 
     if user:
         session['usuario'] = user['email']
@@ -87,11 +86,10 @@ def Registro():
         password = request.form.get('password')
         id_rol = 2
 
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO usuario (email, nombre, password, id_rol) VALUES (%s, %s, %s, %s)",
-                    (email, nombre, password, id_rol))
-        mysql.connection.commit()
-        cur.close()
+        with mysql.connection.cursor() as cur:
+            cur.execute("INSERT INTO usuario (email, nombre, password, id_rol) VALUES (%s, %s, %s, %s)",
+                        (email, nombre, password, id_rol))
+            mysql.connection.commit()
 
         flash('Usuario registrado correctamente. Ahora puedes iniciar sesión.', 'success')
         return redirect(url_for('login'))
@@ -110,17 +108,14 @@ def logout():
 @app.route('/admin')
 def admin():
     if 'usuario' in session and session.get('rol') == 1:
-        cur = mysql.connection.cursor()
+        with mysql.connection.cursor() as cur:
+            # Contar usuarios
+            cur.execute("SELECT COUNT(*) AS total_usuarios FROM usuario")
+            total_usuarios = cur.fetchone()['total_usuarios']
 
-        # Contar usuarios
-        cur.execute("SELECT COUNT(*) AS total_usuarios FROM usuario")
-        total_usuarios = cur.fetchone()['total_usuarios']
-
-        # Contar productos
-        cur.execute("SELECT COUNT(*) AS total_productos FROM producto")
-        total_productos = cur.fetchone()['total_productos']
-
-        cur.close()
+            # Contar productos
+            cur.execute("SELECT COUNT(*) AS total_productos FROM producto")
+            total_productos = cur.fetchone()['total_productos']
 
         return render_template('admin.html',
                                total_usuarios=total_usuarios,
@@ -134,10 +129,9 @@ def admin():
 # =========================
 @app.route('/listar')
 def listar():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM usuario")
-    usuarios = cur.fetchall()
-    cur.close()
+    with mysql.connection.cursor() as cur:
+        cur.execute("SELECT * FROM usuario")
+        usuarios = cur.fetchall()
     return render_template("listar.html", usuarios=usuarios)
 
 @app.route('/guardar', methods=['POST'])
@@ -146,10 +140,10 @@ def guardar():
     email = request.form['email']
     password = request.form['password']
     id_rol = 2
-    cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO usuario (nombre, email, password, id_rol) VALUES (%s, %s, %s, %s)",
-                (nombre, email, password, id_rol))
-    mysql.connection.commit()
+    with mysql.connection.cursor() as cur:
+        cur.execute("INSERT INTO usuario (nombre, email, password, id_rol) VALUES (%s, %s, %s, %s)",
+                    (nombre, email, password, id_rol))
+        mysql.connection.commit()
     flash('Usuario agregado correctamente', 'success')
     return redirect(url_for('listar'))
 
@@ -159,18 +153,18 @@ def updateUsuario():
     nombre = request.form['nombre']
     email = request.form['email']
     password = request.form['password']
-    cur = mysql.connection.cursor()
-    cur.execute("UPDATE usuario SET nombre=%s, email=%s, password=%s WHERE id=%s",
-                (nombre, email, password, id))
-    mysql.connection.commit()
+    with mysql.connection.cursor() as cur:
+        cur.execute("UPDATE usuario SET nombre=%s, email=%s, password=%s WHERE id=%s",
+                    (nombre, email, password, id))
+        mysql.connection.commit()
     flash('Usuario actualizado correctamente', 'success')
     return redirect(url_for('listar'))
 
 @app.route('/borrarUser/<int:id>')
 def borrarUser(id):
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM usuario WHERE id=%s", (id,))
-    mysql.connection.commit()
+    with mysql.connection.cursor() as cur:
+        cur.execute("DELETE FROM usuario WHERE id=%s", (id,))
+        mysql.connection.commit()
     flash('Usuario eliminado correctamente', 'question')
     return redirect(url_for('listar'))
 
@@ -179,18 +173,16 @@ def borrarUser(id):
 # =========================
 @app.route('/listar_productos')
 def listar_productos():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM producto")
-    productos = cur.fetchall()
-    cur.close()
+    with mysql.connection.cursor() as cur:
+        cur.execute("SELECT * FROM producto")
+        productos = cur.fetchall()
     return render_template("listar_productos.html", productos=productos)
 
 @app.route('/api/productos')
 def api_productos():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM producto")
-    data = cur.fetchall()
-    cur.close()
+    with mysql.connection.cursor() as cur:
+        cur.execute("SELECT * FROM producto")
+        data = cur.fetchall()
     return jsonify(data)
 
 # =========================
@@ -204,11 +196,10 @@ def listar_productos_agregados():
         precio = request.form['precio']
         stock = request.form['stock']
 
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO producto (nombre, descripcion, precio, stock) VALUES (%s, %s, %s, %s)",
-                    (nombre, descripcion, precio, stock))
-        mysql.connection.commit()
-        cur.close()
+        with mysql.connection.cursor() as cur:
+            cur.execute("INSERT INTO producto (nombre, descripcion, precio, stock) VALUES (%s, %s, %s, %s)",
+                        (nombre, descripcion, precio, stock))
+            mysql.connection.commit()
 
         flash('Producto agregado correctamente', 'success')
         return redirect(url_for('listar_productos'))
