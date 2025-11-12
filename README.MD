@@ -25,4 +25,4 @@ MySq1
 ![alt text](./imagen.png)
 ## Vista de accesos :[alttext](image-1.png)
 ## Vista dashboard (panel)
-[alt text] (image-2.png)
+![alt text](./cont.png)
