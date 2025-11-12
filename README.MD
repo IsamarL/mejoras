@@ -22,7 +22,7 @@ Gestor de base de datos:
 MySq1
 
 ## Vistas principal
-• [alttext](image.png)
+• [alttext](./imagen.png)
 ## Vista de accesos :[alttext](image-1.png)
 ## Vista dashboard (panel)
 [alt text] (image-2.png)
