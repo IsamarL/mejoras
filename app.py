@@ -234,8 +234,3 @@ def decrementar():
     contador -= 1
     return jsonify({'contador': contador})
 
-# =========================
-# MAIN
-# =========================
-if __name__ == '__main__':
-    app.run(debug=True, port=8000)
