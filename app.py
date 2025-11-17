@@ -20,17 +20,33 @@ mysql = MySQL(app)
 # =========================
 # RUTAS PRINCIPALES
 # =========================
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def inicio():
+
+    # ----------- POST (lo que pediste) -----------
+    if request.method == 'POST':
+        # Si el usuario está logueado
+        if 'usuario' in session:
+            if session.get('rol') == 1:
+                return redirect(url_for('admin'))
+            return render_template("index.html", usuario=session['usuario'])
+        
+        # Si no está logueado igual renderiza el inicio
+        return render_template("index.html")
+
+    # ----------- GET (Render lo necesita) -----------
     if 'usuario' in session:
         if session.get('rol') == 1:
             return redirect(url_for('admin'))
         return render_template("index.html", usuario=session['usuario'])
+
     return render_template("index.html")
+
 
 @app.route('/acercade')
 def acercade():
     return render_template("acercade.html")
+
 
 @app.route('/contacto', methods=['GET', 'POST'])
 def contacto():
@@ -41,6 +57,7 @@ def contacto():
         user['mensaje'] = request.args.get('mensaje', '')
     return render_template("contacto.html", usuario=user)
 
+
 @app.route('/contactopost', methods=['GET', 'POST'])
 def contactopost():
     user = {'nombre': '', 'email': '', 'mensaje': ''}
@@ -50,12 +67,14 @@ def contactopost():
         user['mensaje'] = request.form.get('mensaje', '')
     return render_template("contactopost.html", usuario=user)
 
+
 # =========================
 # LOGIN / REGISTRO / LOGOUT
 # =========================
 @app.route('/login', methods=['GET'])
 def login():
     return render_template("login.html")
+
 
 @app.route('/accesologin', methods=['POST'])
 def accesologin():
@@ -78,6 +97,7 @@ def accesologin():
         flash('Usuario y Contraseña incorrecta', 'danger')
         return render_template("login.html")
 
+
 @app.route('/Registro', methods=['GET', 'POST'])
 def Registro():
     if request.method == 'POST':
@@ -96,11 +116,13 @@ def Registro():
 
     return render_template("Registro.html")
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     flash('Sesión cerrada con éxito.', 'info')
     return redirect(url_for('inicio'))
+
 
 # =========================
 # PANEL ADMIN CON CONTADORES
@@ -109,11 +131,9 @@ def logout():
 def admin():
     if 'usuario' in session and session.get('rol') == 1:
         with mysql.connection.cursor() as cur:
-            # Contar usuarios
             cur.execute("SELECT COUNT(*) AS total_usuarios FROM usuario")
             total_usuarios = cur.fetchone()['total_usuarios']
 
-            # Contar productos
             cur.execute("SELECT COUNT(*) AS total_productos FROM producto")
             total_productos = cur.fetchone()['total_productos']
 
@@ -124,6 +144,7 @@ def admin():
         flash('Debes iniciar sesión como administrador para acceder al panel', 'warning')
         return redirect(url_for('login'))
 
+
 # =========================
 # LISTAR USUARIOS (CRUD)
 # =========================
@@ -133,6 +154,7 @@ def listar():
         cur.execute("SELECT * FROM usuario")
         usuarios = cur.fetchall()
     return render_template("listar.html", usuarios=usuarios)
+
 
 @app.route('/guardar', methods=['POST'])
 def guardar():
@@ -147,6 +169,7 @@ def guardar():
     flash('Usuario agregado correctamente', 'success')
     return redirect(url_for('listar'))
 
+
 @app.route('/updateUsuario', methods=['POST'])
 def updateUsuario():
     id = request.form['id']
@@ -160,6 +183,7 @@ def updateUsuario():
     flash('Usuario actualizado correctamente', 'success')
     return redirect(url_for('listar'))
 
+
 @app.route('/borrarUser/<int:id>')
 def borrarUser(id):
     with mysql.connection.cursor() as cur:
@@ -167,6 +191,7 @@ def borrarUser(id):
         mysql.connection.commit()
     flash('Usuario eliminado correctamente', 'question')
     return redirect(url_for('listar'))
+
 
 # =========================
 # LISTAR PRODUCTOS
@@ -178,12 +203,14 @@ def listar_productos():
         productos = cur.fetchall()
     return render_template("listar_productos.html", productos=productos)
 
+
 @app.route('/api/productos')
 def api_productos():
     with mysql.connection.cursor() as cur:
         cur.execute("SELECT * FROM producto")
         data = cur.fetchall()
     return jsonify(data)
+
 
 # =========================
 # AGREGAR PRODUCTOS
@@ -206,6 +233,7 @@ def listar_productos_agregados():
 
     return render_template("listar_productos_agregados.html")
 
+
 # =========================
 # PERFIL DE USUARIO
 # =========================
@@ -217,10 +245,11 @@ def usuario():
         flash('Debes iniciar sesión para acceder a tu perfil', 'warning')
         return redirect(url_for('login'))
 
+
 # =========================
-# CONTADOR DINÁMICO (NO NECESARIO PARA USUARIOS/PRODUCTOS)
+# CONTADOR DINÁMICO
 # =========================
-contador = 0  # variable global
+contador = 0
 
 @app.route('/incrementar', methods=['POST'])
 def incrementar():
@@ -228,9 +257,16 @@ def incrementar():
     contador += 1
     return jsonify({'contador': contador})
 
+
 @app.route('/decrementar', methods=['POST'])
 def decrementar():
     global contador
     contador -= 1
     return jsonify({'contador': contador})
 
+
+# =========================
+# MAIN
+# =========================
+if __name__ == '__main__':
+    app.run(debug=True, port=8000)
